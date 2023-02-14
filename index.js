@@ -1,9 +1,19 @@
-const width = 600;
-const height = 600;
+const width = window.innerWidth * 0.7;
+const height = window.innerWidth * 0.7;
 const centerX = width / 2;
 const centerY = height / 2;
 
+
+const newR = width / 275 * 5
+const newD = width / 600 * 10
+const newA = width / 600 * 2000
+const newB = width / 600 * 5000
+console.log(width)
+console.log(newR)
+
 const canvas = document.querySelector("#heart");
+canvas.height = height
+canvas.width = width
 const context = canvas.getContext("2d");
 context.moveTo(0, 0);
 context.fillStyle = "RGBA(252, 107, 113, 1.00)";
@@ -18,7 +28,7 @@ class Heart {
     return Math.floor(Math.random() * (max + 1)) * (!!Math.floor(Math.random() * 2) ? 1 : -1);
   }
 
-  static generator(t, ratio = 11) {
+  static generator(t, ratio = newR) {
     let x = 16 * Math.sin(t) ** 3;
     let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
 
@@ -69,7 +79,7 @@ class Heart {
     const dx = ratio * k * (x - centerX) + Heart.randomF(1);
     const dy = ratio * k * (y - centerY) + Heart.randomF(1);;
 
-    console.log(parseInt(x - dx), parseInt(y - dy));
+    // console.log(parseInt(x - dx), parseInt(y - dy));
     return {
       x: parseInt(x - dx),
       y: parseInt(y - dy)
@@ -81,15 +91,15 @@ class Heart {
   }
 
   init() {
-    this.fps = 1;
+    this.fps = 30;
     this.timer = null;
     this.points = [];
     this.edgePoints = [];
     this.centerPoints = [];
     this.fpsPoints = {};
-    this.initPoints(2000);
+    this.initPoints(newA);
     this.initEdgePoints();
-    this.initCenterPoints(6000);
+    this.initCenterPoints(newB);
 
     let f = 0;
     while (f < this.fps) {
@@ -139,7 +149,7 @@ class Heart {
   }
 
   initFpsPoints(f) {
-    const ratio = 10 * Heart.sport(f / 10 * Math.PI) / 1;
+    const ratio = newD * Heart.sport(f / 10 * Math.PI) / 1;
     const radius = parseInt(4 + 6 * (1 + Heart.sport(f / 10 * Math.PI)));
     const number = parseInt(3000 + 4000 * Math.abs(Heart.sport(f / 10 * Math.PI) ** 2));
 
@@ -147,9 +157,10 @@ class Heart {
     const haloPoints = [];
 
     let i = 0;
+    // 外层粒子
     while (i < number) {
       const t = Heart.random(0, 4 * Math.PI);
-      const point = Heart.generator(t, 11.5);
+      const point = Heart.generator(t, newR + 0.5);
       const res = Heart.shrink(point.x, point.y, radius);
 
       if (haloPoints.every(point => point.x !== res.x && point.y !== res.y)) {
@@ -169,6 +180,7 @@ class Heart {
       i++;
     }
 
+    // 边框
     this.points.forEach(point => {
       const res = Heart.getPosition(point.x, point.y, ratio)
       const size = [1, 2, 3][Math.floor(Math.random() * 3)];
@@ -179,6 +191,7 @@ class Heart {
       })
     });
 
+    // 内边框
     this.edgePoints.forEach(point => {
       const res = Heart.getPosition(point.x, point.y, ratio)
       const size = [1, 2][Math.floor(Math.random() * 2)];
@@ -189,6 +202,7 @@ class Heart {
       })
     });
 
+    // 整个心粒子
     this.centerPoints.forEach(point => {
       const res = Heart.getPosition(point.x, point.y, ratio)
       const size = [1, 2][Math.floor(Math.random() * 2)];
@@ -214,7 +228,7 @@ class Heart {
     this.timer = setInterval(() => {
       context.clearRect(0, 0, width, height);
       this.render(f++);
-    }, 500);
+    }, 200);
   }
 }
 
