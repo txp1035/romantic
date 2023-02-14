@@ -21,6 +21,11 @@ const HomePage: React.FC = () => {
   const shortHashHour = hash(strHour).slice(0, 7).toLocaleUpperCase();
   const isHide = obj?.d?.toLocaleUpperCase() === shortHashHour;
   console.log(123, obj);
+  if (obj?.b === 'txp1035') {
+    obj.i = '哥哥';
+    obj.you = '宝宝';
+    obj.action = 'love';
+  }
   useEffect(() => {
     Toast.show({
       icon: 'loading',
