@@ -20,7 +20,9 @@ const HomePage: React.FC = () => {
   const strHour = moment().format('YYYY-MM-DD HH');
   const shortHashHour = hash(strHour).slice(0, 7).toLocaleUpperCase();
   const isHide =
-    obj?.d?.toLocaleUpperCase() === shortHashHour || obj?.b === 'txp1035';
+    obj?.d?.toLocaleUpperCase() === shortHashHour ||
+    obj?.b === 'txp1035' ||
+    obj?.a === '1';
   console.log(123, obj);
   if (obj?.b === 'txp1035') {
     obj.i = '哥哥';
