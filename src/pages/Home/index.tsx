@@ -52,7 +52,7 @@ const HomePage: React.FC = () => {
       {/* <Spin tip="加载中" spinning={first}> */}
       <div className={styles.container}>
         <h1>
-          {obj.a} {obj.b} {obj.c}
+          {obj.i} {obj.action || '喜欢'} {obj.you}
         </h1>
         <canvas id="heart"></canvas>
         <audio loop>
