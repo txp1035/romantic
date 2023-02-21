@@ -366,7 +366,28 @@ const HomePage: React.FC = () => {
       duration: 0,
     });
     setfirst(false);
+    // const clipboard = new Clipboard('.copyBtn');
+    // // 复制成功后执行的回调函数
+    // clipboard.on('success', function (e) {
+    //   console.log(e.trigger);
+    //   Toast.show({
+    //     icon: 'success',
+    //     content: '复制成功',
+    //   });
+    // });
+
+    // // 复制失败后执行的回调函数
+    // clipboard.on('error', function (e) {
+    //   Toast.show({
+    //     icon: 'fail',
+    //     content: '失败请联系作者',
+    //   });
+    // });
+    return () => {
+      clipboard.destroy();
+    };
   }, []);
+
   useEffect(() => {
     if (!first && !mode) {
       heart = new Heart({
@@ -420,6 +441,7 @@ const HomePage: React.FC = () => {
       )}
       {mode && (
         <>
+          <div id="copyText"></div>
           <Form
             initialValues={obj}
             onFinish={(values: any) => {
@@ -427,25 +449,45 @@ const HomePage: React.FC = () => {
                 setObj(values);
               }
               if (btn === 'copy') {
-                const url = `http://heart.imtxp.cn/?${qs.stringify(values)}`;
-                navigator.clipboard.writeText(url).then(
-                  () => {
+                const text = `http://heart.imtxp.cn/?${qs.stringify(values)}`;
+                try {
+                  if (navigator.clipboard) {
+                    // clipboard api 复制
+                    navigator.clipboard.writeText(text);
                     Toast.show({
                       icon: 'success',
                       content: '复制成功',
                     });
-                  },
-                  () => {
+                  } else {
+                    const textarea = document.createElement('textarea');
+                    document.body.appendChild(textarea);
+                    // 隐藏此输入框
+                    textarea.style.position = 'fixed';
+                    textarea.style.clip = 'rect(0 0 0 0)';
+                    textarea.style.top = '10px';
+                    // 赋值
+                    textarea.value = text;
+                    // 选中
+                    textarea.select();
+                    // 复制
+                    document.execCommand('copy', true);
+                    // 移除输入框
+                    document.body.removeChild(textarea);
                     Toast.show({
-                      icon: 'fail',
-                      content: '失败请联系作者',
+                      icon: 'success',
+                      content: '复制成功',
                     });
-                  },
-                );
+                  }
+                } catch (error) {
+                  Toast.show({
+                    icon: 'fail',
+                    content: '失败请联系作者',
+                  });
+                }
               }
             }}
             footer={
-              <Space wrap align="center">
+              <Space wrap justify="center" block align="center">
                 <Button
                   block
                   onClick={() => {
@@ -496,8 +538,11 @@ const HomePage: React.FC = () => {
                 showCount
               />
             </Form.Item>
-            <Form.Item name="captcha" label="影藏作者信息 ">
-              <Input placeholder="关注公众号，发送heart获取解除验证码" />
+            <Form.Item
+              name="captcha"
+              label="影藏作者信息(关注公众号，发送heart获取解除验证码)"
+            >
+              <Input placeholder="输入验证码" />
             </Form.Item>
           </Form>
         </>
