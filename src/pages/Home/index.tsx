@@ -9,7 +9,6 @@ import {
   Button,
   Space,
 } from 'antd-mobile';
-import { useLocation } from '@umijs/max';
 import hash from 'object-hash';
 import moment from 'dayjs';
 import qs from 'query-string';
@@ -339,7 +338,6 @@ const HomePage: React.FC = () => {
   const [first, setfirst] = useState(true);
   // 浏览模式和编辑模式切换 false是浏览
   const [mode, setMode] = useState(false);
-  const location = useLocation();
   const objQs = qs.parse(location.search);
   const [obj, setObj] = useState({
     tips: '你是否准备好了？',
