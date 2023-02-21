@@ -2,26 +2,32 @@ const width = window.innerWidth * 0.7;
 const height = window.innerWidth * 0.7;
 const centerX = width / 2;
 const centerY = height / 2;
-console.log(width)
 
-const newR = width / 275 * 5
-const newD = width / 600 * 10
-const newA = width / 600 * 2000
-const newB = width / 600 * 5000
+const newR = (width / 275) * 5;
+const newD = (width / 600) * 10;
+const newA = (width / 600) * 2000;
+const newB = (width / 600) * 5000;
 
 export default class Heart {
-
   static random(min, max) {
     return Math.random() * (max - min) + min;
   }
 
   static randomF(max) {
-    return Math.floor(Math.random() * (max + 1)) * (!!Math.floor(Math.random() * 2) ? 1 : -1);
+    return (
+      Math.floor(Math.random() * (max + 1)) *
+      (!!Math.floor(Math.random() * 2) ? 1 : -1)
+    );
   }
 
   static generator(t, ratio = newR) {
     let x = 16 * Math.sin(t) ** 3;
-    let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+    let y = -(
+      13 * Math.cos(t) -
+      5 * Math.cos(2 * t) -
+      2 * Math.cos(3 * t) -
+      Math.cos(4 * t)
+    );
 
     x *= ratio;
     y *= ratio;
@@ -31,7 +37,7 @@ export default class Heart {
 
     return {
       x: parseInt(x),
-      y: parseInt(y)
+      y: parseInt(y),
     };
   }
 
@@ -44,7 +50,7 @@ export default class Heart {
 
     return {
       x: parseInt(x - dx),
-      y: parseInt(y - dy)
+      y: parseInt(y - dy),
     };
   }
 
@@ -56,34 +62,34 @@ export default class Heart {
 
     return {
       x: parseInt(x - dx),
-      y: parseInt(y - dy)
+      y: parseInt(y - dy),
     };
   }
 
   static sport(k) {
-    return 2 * (2 * Math.sin(4 * k)) / 2 * Math.PI;
+    return ((2 * (2 * Math.sin(4 * k))) / 2) * Math.PI;
   }
 
   static getPosition(x, y, ratio) {
-    const k = 1 / (((x - centerX) ** 2 + (y - centerY) ** 2) ** 0.520);
+    const k = 1 / ((x - centerX) ** 2 + (y - centerY) ** 2) ** 0.52;
 
     const dx = ratio * k * (x - centerX) + Heart.randomF(1);
-    const dy = ratio * k * (y - centerY) + Heart.randomF(1);;
+    const dy = ratio * k * (y - centerY) + Heart.randomF(1);
 
     // console.log(parseInt(x - dx), parseInt(y - dy));
     return {
       x: parseInt(x - dx),
-      y: parseInt(y - dy)
+      y: parseInt(y - dy),
     };
   }
 
   constructor() {
-    const canvas = document.querySelector("#heart");
-    canvas.height = height
-    canvas.width = width
-    this.context = canvas.getContext("2d");
+    const canvas = document.querySelector('#heart');
+    canvas.height = height;
+    canvas.width = width;
+    this.context = canvas.getContext('2d');
     this.context.moveTo(0, 0);
-    this.context.fillStyle = "RGBA(252, 107, 113, 1.00)";
+    this.context.fillStyle = 'RGBA(252, 107, 113, 1.00)';
     this.init();
   }
 
@@ -100,9 +106,9 @@ export default class Heart {
 
     let f = 0;
     while (f < this.fps) {
-      this.initFpsPoints(f)
+      this.initFpsPoints(f);
       f++;
-    };
+    }
   }
 
   initPoints(n) {
@@ -115,11 +121,11 @@ export default class Heart {
         y: res.y,
       });
       i++;
-    };
+    }
   }
 
   initEdgePoints() {
-    this.points.forEach(point => {
+    this.points.forEach((point) => {
       let i = 0;
       while (i < 3) {
         const res = Heart.expand(point.x, point.y);
@@ -146,9 +152,11 @@ export default class Heart {
   }
 
   initFpsPoints(f) {
-    const ratio = newD * Heart.sport(f / 10 * Math.PI) / 1;
-    const radius = parseInt(4 + 6 * (1 + Heart.sport(f / 10 * Math.PI)));
-    const number = parseInt(3000 + 4000 * Math.abs(Heart.sport(f / 10 * Math.PI) ** 2));
+    const ratio = (newD * Heart.sport((f / 10) * Math.PI)) / 1;
+    const radius = parseInt(4 + 6 * (1 + Heart.sport((f / 10) * Math.PI)));
+    const number = parseInt(
+      3000 + 4000 * Math.abs(Heart.sport((f / 10) * Math.PI) ** 2),
+    );
 
     const allPoints = [];
     const haloPoints = [];
@@ -160,7 +168,7 @@ export default class Heart {
       const point = Heart.generator(t, newR + 0.5);
       const res = Heart.shrink(point.x, point.y, radius);
 
-      if (haloPoints.every(point => point.x !== res.x && point.y !== res.y)) {
+      if (haloPoints.every((point) => point.x !== res.x && point.y !== res.y)) {
         haloPoints.push({
           x: res.x,
           y: res.y,
@@ -178,43 +186,43 @@ export default class Heart {
     }
 
     // 边框
-    this.points.forEach(point => {
-      const res = Heart.getPosition(point.x, point.y, ratio)
+    this.points.forEach((point) => {
+      const res = Heart.getPosition(point.x, point.y, ratio);
       const size = [1, 2, 3][Math.floor(Math.random() * 3)];
       allPoints.push({
         x: res.x,
         y: res.y,
         size,
-      })
+      });
     });
 
     // 内边框
-    this.edgePoints.forEach(point => {
-      const res = Heart.getPosition(point.x, point.y, ratio)
+    this.edgePoints.forEach((point) => {
+      const res = Heart.getPosition(point.x, point.y, ratio);
       const size = [1, 2][Math.floor(Math.random() * 2)];
       allPoints.push({
         x: res.x,
         y: res.y,
         size,
-      })
+      });
     });
 
     // 整个心粒子
-    this.centerPoints.forEach(point => {
-      const res = Heart.getPosition(point.x, point.y, ratio)
+    this.centerPoints.forEach((point) => {
+      const res = Heart.getPosition(point.x, point.y, ratio);
       const size = [1, 2][Math.floor(Math.random() * 2)];
       allPoints.push({
         x: res.x,
         y: res.y,
         size,
-      })
+      });
     });
 
     this.fpsPoints[f] = allPoints;
   }
 
   render(f) {
-    this.fpsPoints[f % this.fps].forEach(point => {
+    this.fpsPoints[f % this.fps].forEach((point) => {
       this.context.fillRect(point.x, point.y, point.size, point.size);
     });
   }
@@ -227,5 +235,8 @@ export default class Heart {
       this.render(f++);
     }, 200);
   }
+  clear() {
+    clearInterval(this.timer);
+    this.timer = null;
+  }
 }
-

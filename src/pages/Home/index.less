@@ -6,6 +6,41 @@
     color: aliceblue;
   }
 
+  h2 {
+    color: aliceblue;
+  }
+
+  h2::after {
+    content: '|';
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+
+  h3 {
+    color: aliceblue;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    .author {
+      width: 77px;
+      margin: 0 auto;
+    }
+  }
+
   canvas {
     display: block;
     margin: 0 auto;
