@@ -1,4 +1,4 @@
-import Heart from './a.js';
+import { Heart, TypeWriting } from './a.js';
 import second from './weixin.png';
 import styles from './index.less';
 import { useEffect, useState } from 'react';
@@ -10,12 +10,15 @@ import { Modal, Toast, Form, Input, TextArea, Button } from 'antd-mobile';
 
 let heart;
 const HomePage: React.FC = () => {
+  const [isClick, setIsClick] = useState(false);
   const [first, setfirst] = useState(true);
+  // 浏览模式和编辑模式切换 false是浏览
   const [mode, setMode] = useState(false);
   const [obj, setObj] = useState({
+    tips: '你是否准备好了？',
     title: '码上掘金',
     content:
-      '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1',
+      '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长',
   });
   useEffect(() => {
     if (mode) {
@@ -41,43 +44,37 @@ const HomePage: React.FC = () => {
   }, []);
   useEffect(() => {
     if (!first && !mode) {
-      heart = new Heart();
-      Toast.clear();
-      Modal.confirm({
-        title: '是否播放心跳声',
-        onCancel: () => {
-          heart.draw();
+      heart = new Heart({
+        width: window.innerWidth * 0.8,
+        color: '#ee879d',
+        mp3: '/heart.mp3',
+      });
+      const data = obj.content;
+      console.log('txp1');
+      const typeWriting = new TypeWriting({
+        select: '#content',
+        content: data,
+        mp3: '/type.mp3',
+        writing: () => {
+          // 打字监听触底
+          const $content = document.querySelector('#content');
+          const $root = document.querySelector('#root');
+          const $noContent = document.querySelector('#noContent');
+          const all = $root?.clientHeight - 24 - $noContent.scrollHeight;
+          if (all < $content?.scrollHeight) {
+            $root.scrollTop = $root.scrollHeight;
+          }
         },
+      });
+      Toast.clear();
+      Modal.alert({
+        title: obj.tips,
         onConfirm: () => {
-          heart.draw();
-          const hearts = document.querySelector('#hearts');
-          hearts.play();
+          setIsClick(true);
           const music = document.querySelector('#music');
           music.play();
-          const data = obj.content.split('');
-          console.log(data);
-          const dom = document.querySelector('#content');
-          const type = document.querySelector('#type');
-          type.play();
-          function writer(index) {
-            const $root = document.querySelector('#root');
-
-            const $noContent = document.querySelector('#noContent');
-            const all = $root?.clientHeight - 24 - $noContent.scrollHeight;
-
-            if (all < dom?.scrollHeight) {
-              $root.scrollTop = $root.scrollHeight;
-            }
-
-            if (index < data.length) {
-              const str = data[index] === '\n' ? '<br/>' : data[index];
-              dom.innerHTML += str;
-              setTimeout(writer, 80, index + 1);
-            } else {
-              type.pause();
-            }
-          }
-          writer(0);
+          heart.draw();
+          typeWriting.run();
         },
       });
     }
@@ -88,31 +85,27 @@ const HomePage: React.FC = () => {
       {!mode && (
         <>
           <div id="noContent">
-            <h1>{obj.title}</h1>
+            {isClick && <h1>{obj.title}</h1>}
             <canvas id="heart"></canvas>
-            <audio loop id="hearts">
-              <source src="/heart.mp3" type="audio/mpeg" />
-            </audio>
             <audio loop id="music">
               <source src="/music.mp3" type="audio/mpeg" />
             </audio>
-            <audio loop id="type">
-              <source src="/type.mp3" type="audio/mpeg" />
-            </audio>
           </div>
           <h2 id="content"></h2>
-          <h3>
-            <div className={styles.author}>作者：道源</div>
-            <div>
-              <a
-                onClick={() => {
-                  setMode(true);
-                }}
-              >
-                点击生成你的专属情书
-              </a>
-            </div>
-          </h3>
+          {isClick && (
+            <h3>
+              <div className={styles.author}>作者：道源</div>
+              <div>
+                <a
+                  onClick={() => {
+                    setMode(true);
+                  }}
+                >
+                  点击生成你的专属情书
+                </a>
+              </div>
+            </h3>
+          )}
           {false && (
             <>
               <img src={second} alt="" width="100%" />
@@ -134,6 +127,13 @@ const HomePage: React.FC = () => {
               </Button>
             }
           >
+            <Form.Item
+              name="tips"
+              label="提示"
+              rules={[{ required: true, message: '提示不能为空' }]}
+            >
+              <Input onChange={console.log} placeholder="请输入提示" />
+            </Form.Item>
             <Form.Item
               name="title"
               label="标题"
