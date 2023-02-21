@@ -428,7 +428,20 @@ const HomePage: React.FC = () => {
               }
               if (btn === 'copy') {
                 const url = `http://heart.imtxp.cn/?${qs.stringify(values)}`;
-                console.log(url);
+                navigator.clipboard.writeText(url).then(
+                  () => {
+                    Toast.show({
+                      icon: 'success',
+                      content: '复制成功',
+                    });
+                  },
+                  () => {
+                    Toast.show({
+                      icon: 'fail',
+                      content: '失败请联系作者',
+                    });
+                  },
+                );
               }
             }}
             footer={
