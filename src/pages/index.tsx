@@ -346,23 +346,6 @@ const HomePage: React.FC = () => {
       duration: 0,
     });
     setfirst(false);
-    // const clipboard = new Clipboard('.copyBtn');
-    // // 复制成功后执行的回调函数
-    // clipboard.on('success', function (e) {
-    //   console.log(e.trigger);
-    //   Toast.show({
-    //     icon: 'success',
-    //     content: '复制成功',
-    //   });
-    // });
-
-    // // 复制失败后执行的回调函数
-    // clipboard.on('error', function (e) {
-    //   Toast.show({
-    //     icon: 'fail',
-    //     content: '失败请联系作者',
-    //   });
-    // });
     return () => {
       clipboard.destroy();
     };
