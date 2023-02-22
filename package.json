@@ -9,10 +9,12 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@arco-design/mobile-react": "^2.25.3",
     "antd-mobile": "^5.28.0",
     "dayjs": "^1.11.7",
     "object-hash": "^3.0.0",
     "query-string": "^8.1.0",
+    "react-transition-group": "^4.4.5",
     "umi": "^4.0.52"
   },
   "devDependencies": {
