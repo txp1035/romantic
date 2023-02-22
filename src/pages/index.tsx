@@ -1,4 +1,3 @@
-import styles from './index.less';
 import { useEffect, useState } from 'react';
 import { Modal, Toast, Form, Input, TextArea, Button, Space } from 'antd-mobile';
 import hash from 'object-hash';
@@ -389,7 +388,7 @@ const HomePage: React.FC = () => {
   }, [first, mode]);
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       {!mode && (
         <>
           <div id="noContent">
@@ -493,7 +492,7 @@ const HomePage: React.FC = () => {
       )}
       {isClick && (
         <h3>
-          <div className={styles.author}>
+          <div className="author">
             {!mode && (
               <div>
                 <a
