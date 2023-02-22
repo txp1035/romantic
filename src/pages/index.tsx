@@ -1,14 +1,6 @@
 import styles from './index.less';
 import { useEffect, useState } from 'react';
-import {
-  Modal,
-  Toast,
-  Form,
-  Input,
-  TextArea,
-  Button,
-  Space,
-} from 'antd-mobile';
+import { Modal, Toast, Form, Input, TextArea, Button, Space } from 'antd-mobile';
 import hash from 'object-hash';
 import moment from 'dayjs';
 import qs from 'query-string';
@@ -102,12 +94,7 @@ class Heart {
   private generatePoint(t, multiple = this.multiple) {
     let x = 16 * Math.sin(t) ** 3;
     // 因为canvas的y轴向下为正向上为负所以要加一个负号
-    let y = -(
-      13 * Math.cos(t) -
-      5 * Math.cos(2 * t) -
-      2 * Math.cos(3 * t) -
-      Math.cos(4 * t)
-    );
+    let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
     return {
       // 默认爱心宽：33，高：30
       // 给坐标放大倍数、从画布中心点开始画
@@ -184,22 +171,17 @@ class Heart {
   }
   private initFpsPoints(f) {
     // 控制心跳幅度，最后一个随机
-    const range =
-      (this.heartbeatAmplitude * Heart.sport((f / 10) * Math.PI)) / 1;
+    const range = (this.heartbeatAmplitude * Heart.sport((f / 10) * Math.PI)) / 1;
     // 得到半径
     const radius = parseInt(4 + 6 * (1 + Heart.sport((f / 10) * Math.PI)));
     const allPoints = [];
     const aroundPoints = [];
-    const number = this.isHideAroundPoints
-      ? 0
-      : parseInt(3000 + 4000 * Math.abs(Heart.sport((f / 10) * Math.PI) ** 2));
+    const number = this.isHideAroundPoints ? 0 : parseInt(3000 + 4000 * Math.abs(Heart.sport((f / 10) * Math.PI) ** 2));
     for (let index = 0; index < number; index++) {
       const t = Heart.random(0, 4 * Math.PI);
       const point = this.generatePoint(t, this.aroundMultiple);
       const res = this.shrink(point.x, point.y, radius);
-      if (
-        aroundPoints.every((point) => point.x !== res.x && point.y !== res.y)
-      ) {
+      if (aroundPoints.every((point) => point.x !== res.x && point.y !== res.y)) {
         aroundPoints.push({
           x: res.x,
           y: res.y,
@@ -492,8 +474,7 @@ const HomePage: React.FC = () => {
                     btn = 'view';
                   }}
                   type="submit"
-                  color="primary"
-                >
+                  color="primary">
                   浏览效果
                 </Button>
                 <Button
@@ -502,33 +483,18 @@ const HomePage: React.FC = () => {
                     btn = 'copy';
                   }}
                   type="submit"
-                  color="success"
-                >
+                  color="success">
                   复制链接
                 </Button>
               </Space>
-            }
-          >
-            <Form.Item
-              name="tips"
-              label="提示"
-              rules={[{ required: true, message: '提示不能为空' }]}
-            >
+            }>
+            <Form.Item name="tips" label="提示" rules={[{ required: true, message: '提示不能为空' }]}>
               <Input placeholder="请输入提示" />
             </Form.Item>
-            <Form.Item
-              name="title"
-              label="标题"
-              rules={[{ required: true, message: '标题不能为空' }]}
-            >
+            <Form.Item name="title" label="标题" rules={[{ required: true, message: '标题不能为空' }]}>
               <Input placeholder="请输入标题" />
             </Form.Item>
-            <Form.Item
-              name="content"
-              label="内容"
-              help="详情内容"
-              rules={[{ required: true, message: '内容不能为空' }]}
-            >
+            <Form.Item name="content" label="内容" help="详情内容" rules={[{ required: true, message: '内容不能为空' }]}>
               <TextArea
                 placeholder="请输入内容"
                 // maxLength={100}
@@ -536,10 +502,7 @@ const HomePage: React.FC = () => {
                 showCount
               />
             </Form.Item>
-            <Form.Item
-              name="captcha"
-              label="影藏作者信息(关注公众号，发送heart获取解除验证码)"
-            >
+            <Form.Item name="captcha" label="影藏作者信息(关注公众号，发送heart获取解除验证码)">
               <Input placeholder="输入验证码" />
             </Form.Item>
           </Form>
@@ -557,8 +520,7 @@ const HomePage: React.FC = () => {
                       typeWriting.stop();
                       heart.clear();
                     }
-                  }}
-                >
+                  }}>
                   点击生成你的专属情书（基于此模板）
                 </a>
               </div>
