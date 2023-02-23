@@ -1,0 +1,175 @@
+import { useEffect, useState } from 'react';
+import hash from 'object-hash';
+import moment from 'dayjs';
+import qs from 'query-string';
+import { Modal } from 'antd-mobile';
+import Dialog from '@arco-design/mobile-react/esm/dialog';
+import Arco from './Arco';
+import Antd from './Antd';
+import './index.less';
+import { Heart, TypeWriting, MUSIC } from './utils';
+
+let heart;
+let typeWriting;
+
+const isJuejin = false;
+
+const HomePage: React.FC = () => {
+  const [isClick, setIsClick] = useState(false);
+  const [first, setfirst] = useState(true);
+  // 浏览模式和编辑模式切换 false是浏览
+  const [mode, setMode] = useState(false);
+  const objQs = qs.parse(location.search);
+  const [obj, setObj] = useState({
+    tips: '你是否准备好了？',
+    title: '码上掘金',
+    content:
+      '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长',
+    color: ['#ee879d', '#f50', 'orange', 'gold', '#87d068', 'teal', '#108ee9', 'purple'],
+    music: MUSIC.music,
+    ...objQs,
+  });
+  useEffect(() => {
+    if (mode) {
+      setMode(false);
+      heart.clear();
+    }
+  }, [JSON.stringify(obj)]);
+
+  const strHour = moment().format('YYYY-MM-DD HH');
+  const shortHashHour = hash(strHour).slice(0, 7).toLocaleUpperCase();
+  const isHide = obj?.captcha?.toLocaleUpperCase() !== shortHashHour;
+
+  useEffect(() => {
+    setfirst(false);
+  }, []);
+
+  useEffect(() => {
+    if (!first && !mode) {
+      heart = new Heart({
+        width: window.innerWidth * 0.8,
+        color: obj.color,
+        mp3: MUSIC.heart,
+      });
+      const data = obj.content;
+      typeWriting = new TypeWriting({
+        select: '#content',
+        content: data,
+        mp3: MUSIC.type,
+        writing: () => {
+          // 打字监听触底
+          const $content = document.querySelector('#content');
+          const $root = document.querySelector('#root');
+          const $noContent = document.querySelector('#noContent');
+          const all = $root?.clientHeight - 24 - $noContent.scrollHeight;
+          if (all < $content?.scrollHeight) {
+            $root.scrollTop = $root.scrollHeight;
+          }
+        },
+      });
+      if (!isJuejin) {
+        Modal.alert({
+          title: obj.tips,
+          onConfirm: () => {
+            setIsClick(true);
+            const music = document.querySelector('#music');
+            music?.setAttribute('src', obj.music);
+            music.play();
+            heart.draw();
+            typeWriting.run();
+          },
+        });
+      } else {
+        Dialog.alert({
+          title: obj.tips,
+          platform: 'ios',
+          onOk: () => {
+            setIsClick(true);
+            const music = document.querySelector('#music');
+            music.play();
+            heart.draw();
+            typeWriting.run();
+          },
+        });
+      }
+    }
+  }, [first, mode]);
+  const submit = ({ values, copyTips, errorTips, btn }) => {
+    const obj = {
+      ...values,
+    };
+    if (typeof values.color === 'string') {
+      obj.color = values.color.split(',').filter((item) => !!item);
+    }
+    if (btn === 'view') {
+      setObj(obj);
+    }
+    if (btn === 'copy') {
+      const text = `http://heart.imtxp.cn/?${qs.stringify(obj)}`;
+      try {
+        if (navigator.clipboard) {
+          // clipboard api 复制
+          navigator.clipboard.writeText(text);
+          copyTips();
+        } else {
+          const textarea = document.createElement('textarea');
+          document.body.appendChild(textarea);
+          // 隐藏此输入框
+          textarea.style.position = 'fixed';
+          textarea.style.clip = 'rect(0 0 0 0)';
+          textarea.style.top = '10px';
+          // 赋值
+          textarea.value = text;
+          // 选中
+          textarea.select();
+          // 复制
+          document.execCommand('copy', true);
+          // 移除输入框
+          document.body.removeChild(textarea);
+          copyTips();
+        }
+      } catch (error) {
+        errorTips();
+      }
+    }
+  };
+  return (
+    <div className="container">
+      {!mode && (
+        <>
+          <div id="noContent">
+            {isClick && <h1>{obj.title}</h1>}
+            <canvas id="heart"></canvas>
+            <audio loop id="music" src={MUSIC.music}></audio>
+          </div>
+          <h2 id="content"></h2>
+        </>
+      )}
+      {mode && !isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
+      {mode && isJuejin && <Arco obj={obj} setObj={setObj} submit={submit} />}
+      {isClick && (
+        <h3>
+          <div className="author">
+            {!mode && (
+              <div>
+                <a
+                  onClick={() => {
+                    if (!mode) {
+                      setMode(true);
+                      typeWriting.stop();
+                      heart.clear();
+                    }
+                  }}>
+                  点击生成你的专属情书（基于此模板）
+                </a>
+              </div>
+            )}
+            {isHide && <div>欢迎关注作者公众号「道源1035」发现好玩的东西</div>}
+          </div>
+        </h3>
+      )}
+    </div>
+  );
+};
+
+export default HomePage;

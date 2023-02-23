@@ -1,23 +1,4 @@
-import { useEffect, useState } from 'react';
-import setRootPixel from '@arco-design/mobile-react/tools/flexible';
-setRootPixel();
-import Button from '@arco-design/mobile-react/esm/button';
-import '@arco-design/mobile-react/esm/button/style';
-import Dialog from '@arco-design/mobile-react/esm/dialog';
-import '@arco-design/mobile-react/esm/dialog/style';
-import Toast from '@arco-design/mobile-react/esm/toast';
-import '@arco-design/mobile-react/esm/toast/style';
-import Form, { useForm } from '@arco-design/mobile-react/esm/form';
-import '@arco-design/mobile-react/esm/form/style';
-import Input from '@arco-design/mobile-react/esm/input';
-import '@arco-design/mobile-react/esm/input/style';
-import Textarea from '@arco-design/mobile-react/esm/textarea';
-import '@arco-design/mobile-react/esm/textarea/style';
-import hash from 'object-hash';
-import moment from 'dayjs';
-import qs from 'query-string';
-
-class Heart {
+export class Heart {
   private config({ width }) {
     // 画布宽度
     this.canvasWidth = width;
@@ -52,22 +33,22 @@ class Heart {
     // this.isHideAroundPoints = true
   }
 
-  private init({ color = 'RGBA(252, 107, 113, 1.00)', mp3 }) {
+  private init({ color = ['#ee879d'], mp3 }) {
     // 画布
     const canvas = document.querySelector('#heart');
     canvas.height = this.canvasHeight;
     canvas.width = this.canvasWidth;
     this.context = canvas.getContext('2d');
     this.context.moveTo(0, 0);
-    this.context.fillStyle = color;
     this.timer = null;
+    this.color = color;
 
     if (mp3) {
-      const body = document.querySelector('body');
+      this.body = document.querySelector('body');
       this.audio = document.createElement('audio');
       this.audio.setAttribute('src', mp3);
       this.audio.setAttribute('loop', true);
-      body.appendChild(this.audio);
+      this.body.appendChild(this.audio);
     }
 
     // 点位等
@@ -259,6 +240,7 @@ class Heart {
   }
   draw() {
     let f = 1;
+    let color = 0;
     if (this.audio) {
       this.audio.play();
     }
@@ -268,30 +250,36 @@ class Heart {
     this.timer = setInterval(() => {
       // 渲染新画面前，情况老画面
       this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+      if (f % 6 === 1) {
+        // 6个画面切换颜色
+        this.context.fillStyle = this.color[color % this.color.length];
+        color++;
+      }
       this.render(f++);
     }, this.time);
   }
   clear() {
     clearInterval(this.timer);
     if (this.audio) {
-      this.audio.pause();
+      this.body.removeChild(this.audio);
+      this.audio = null;
     }
     this.timer = null;
   }
 }
 
-class TypeWriting {
+export class TypeWriting {
   constructor({ select, content, mp3, writing = () => {} }) {
     this.select = select;
     this.writing = writing;
     this.dom = document.querySelector(select);
     this.content = content.split('');
     if (mp3) {
-      const body = document.querySelector('body');
+      this.body = document.querySelector('body');
       this.audio = document.createElement('audio');
       this.audio.setAttribute('src', mp3);
       this.audio.setAttribute('loop', true);
-      body.appendChild(this.audio);
+      this.body.appendChild(this.audio);
     }
   }
   private writer(index, that) {
@@ -312,7 +300,8 @@ class TypeWriting {
   stop() {
     this.isStop = true;
     if (this.audio) {
-      this.audio.pause();
+      this.body.removeChild(this.audio);
+      this.audio = null;
     }
   }
   run() {
@@ -323,196 +312,8 @@ class TypeWriting {
   }
 }
 
-let btn;
-let heart;
-let typeWriting;
-let toastInstance;
-const HomePage: React.FC = () => {
-  const [isClick, setIsClick] = useState(false);
-  const [first, setfirst] = useState(true);
-  // 浏览模式和编辑模式切换 false是浏览
-  const [mode, setMode] = useState(false);
-  const objQs = qs.parse(location.search);
-  const [obj, setObj] = useState({
-    tips: '你是否准备好了？',
-    title: '码上掘金',
-    content:
-      '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长',
-    ...objQs,
-  });
-  useEffect(() => {
-    if (mode) {
-      setMode(false);
-      heart.clear();
-    }
-  }, [JSON.stringify(obj)]);
-
-  const strHour = moment().format('YYYY-MM-DD HH');
-  const shortHashHour = hash(strHour).slice(0, 7).toLocaleUpperCase();
-  const isHide = obj?.captcha?.toLocaleUpperCase() !== shortHashHour;
-
-  useEffect(() => {
-    toastInstance = Toast['toast']({
-      loading: true,
-      duration: 0,
-    });
-    setfirst(false);
-    return () => {
-      clipboard.destroy();
-    };
-  }, []);
-  useEffect(() => {
-    if (!first && !mode) {
-      heart = new Heart({
-        width: window.innerWidth * 0.8,
-        color: '#ee879d',
-        mp3: '/heart.mp3',
-      });
-      const data = obj.content;
-      typeWriting = new TypeWriting({
-        select: '#content',
-        content: data,
-        mp3: '/type.mp3',
-        writing: () => {
-          // 打字监听触底
-          const $content = document.querySelector('#content');
-          const $root = document.querySelector('#root');
-          const $noContent = document.querySelector('#noContent');
-          const all = $root?.clientHeight - 24 - $noContent.scrollHeight;
-          if (all < $content?.scrollHeight) {
-            $root.scrollTop = $root.scrollHeight;
-          }
-        },
-      });
-      // Toast.clear();
-      toastInstance.close();
-      Dialog.alert({
-        title: obj.tips,
-        platform: 'ios',
-        onOk: () => {
-          setIsClick(true);
-          const music = document.querySelector('#music');
-          music.play();
-          heart.draw();
-          typeWriting.run();
-        },
-      });
-    }
-  }, [first, mode]);
-  const [form] = useForm();
-  return (
-    <div className="container">
-      {!mode && (
-        <>
-          <div id="noContent">
-            {isClick && <h1>{obj.title}</h1>}
-            <canvas id="heart"></canvas>
-            <audio loop id="music">
-              <source src="/music.mp3" type="audio/mpeg" />
-            </audio>
-          </div>
-          <h2 id="content"></h2>
-        </>
-      )}
-      {mode && (
-        <>
-          <Form
-            initialValues={obj}
-            style={{ background: '#fff' }}
-            form={form}
-            onSubmit={(values) => {
-              if (btn === 'view') {
-                setObj(JSON.parse(JSON.stringify(values)));
-              }
-              if (btn === 'copy') {
-                const text = `http://heart.imtxp.cn/?${qs.stringify(values)}`;
-                try {
-                  if (navigator.clipboard) {
-                    // clipboard api 复制
-                    navigator.clipboard.writeText(text);
-                    Toast['success']('复制成功');
-                  } else {
-                    const textarea = document.createElement('textarea');
-                    document.body.appendChild(textarea);
-                    // 隐藏此输入框
-                    textarea.style.position = 'fixed';
-                    textarea.style.clip = 'rect(0 0 0 0)';
-                    textarea.style.top = '10px';
-                    // 赋值
-                    textarea.value = text;
-                    // 选中
-                    textarea.select();
-                    // 复制
-                    document.execCommand('copy', true);
-                    // 移除输入框
-                    document.body.removeChild(textarea);
-                    Toast['success']('复制成功');
-                  }
-                } catch (error) {
-                  Toast['error']('失败请联系作者');
-                }
-              }
-            }}
-            layout="vertical">
-            <Form.Item field="tips" label="提示" required>
-              <Input placeholder="请输入提示" />
-            </Form.Item>
-            <Form.Item field="title" label="标题" required>
-              <Input placeholder="请输入标题" />
-            </Form.Item>
-            <Form.Item field="content" label="内容" required>
-              <Textarea rows={10} placeholder="请输入内容" />
-            </Form.Item>
-            <Form.Item field="captcha" label="影藏作者信息(关注公众号，发送heart获取解除验证码)">
-              <Input placeholder="输入验证码" />
-            </Form.Item>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                inline
-                size="medium"
-                onClick={() => {
-                  btn = 'view';
-                  form.submit();
-                }}>
-                浏览效果
-              </Button>
-              <Button
-                inline
-                size="medium"
-                onClick={() => {
-                  btn = 'copy';
-                  form.submit();
-                }}>
-                复制链接
-              </Button>
-            </div>
-          </Form>
-        </>
-      )}
-      {isClick && (
-        <h3>
-          <div className="author">
-            {!mode && (
-              <div>
-                <a
-                  onClick={() => {
-                    if (!mode) {
-                      setMode(true);
-                      typeWriting.stop();
-                      heart.clear();
-                    }
-                  }}>
-                  点击生成你的专属情书（基于此模板）
-                </a>
-              </div>
-            )}
-            {isHide && <div>欢迎关注作者公众号「道源1035」发现好玩的东西</div>}
-          </div>
-        </h3>
-      )}
-    </div>
-  );
+export const MUSIC = {
+  music: 'https://heart.imtxp.cn/music.mp3',
+  heart: 'https://heart.imtxp.cn/heart.mp3',
+  type: 'https://heart.imtxp.cn/type.mp3',
 };
-
-export default HomePage;
