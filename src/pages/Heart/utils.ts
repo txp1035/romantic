@@ -23,8 +23,8 @@ export class Heart {
     // 外边框放大倍数
     this.aroundMultiple = this.multiple + (this.width / 370) * 0.5;
     // 总画面数，一共5个画面，完成从膨胀到收缩的过程，6帧最小的时候多一个停顿感
-    // 一秒24到30帧比较好，目前是200毫秒一个画面，一秒5个画面
-    this.fps = 30;
+    // 一秒24到30帧比较好，目前是200毫秒一个画面，一秒6个画面
+    this.fps = 6;
     this.time = 200;
     // 方便分段调试的参数
     // this.isHidePoints = true
