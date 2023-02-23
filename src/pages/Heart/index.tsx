@@ -154,29 +154,47 @@ const HomePage: React.FC = () => {
       )}
       {mode && !isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
       {mode && isJuejin && <Arco obj={obj} setObj={setObj} submit={submit} />}
-      {isClick && (
-        <h3>
-          <div className="author">
-            {!mode && (
-              <div>
-                <a
-                  onClick={() => {
-                    if (!mode) {
-                      // 要发掘金不能直接给body赋值
-                      $root?.setAttribute('style', `background: #fff;`);
-                      setMode(true);
-                      typeWriting.stop();
-                      heart.clear();
-                    }
-                  }}>
-                  点击生成你的专属情书（基于此模板）
-                </a>
-              </div>
-            )}
-            {isHide && <div>欢迎关注作者公众号「道源1035」发现好玩的东西</div>}
-          </div>
-        </h3>
-      )}
+      <h3>
+        <div className="author">
+          {!mode && (
+            <div>
+              <a
+                onClick={() => {
+                  if (!mode) {
+                    // 要发掘金不能直接给body赋值
+                    $root?.setAttribute('style', `background: #fff;`);
+                    setMode(true);
+                    typeWriting.stop();
+                    heart.clear();
+                  }
+                }}>
+                自定义此页面（基于此模板）
+              </a>
+            </div>
+          )}
+          {isHide && (
+            <div>
+              由公众号
+              <a
+                onClick={() => {
+                  if (!isJuejin) {
+                    Modal.alert({
+                      title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
+                    });
+                  } else {
+                    Dialog.alert({
+                      title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
+                      platform: 'ios',
+                    });
+                  }
+                }}>
+                「道源1035」
+              </a>
+              提供支持
+            </div>
+          )}
+        </div>
+      </h3>
     </div>
   );
 };

@@ -315,4 +315,5 @@ export const CONSTANT = {
   music: 'https://heart.imtxp.cn/music.mp3',
   heart: 'https://heart.imtxp.cn/heart.mp3',
   type: 'https://heart.imtxp.cn/type.mp3',
+  weixin: 'https://heart.imtxp.cn/weixin.png',
 };
