@@ -39,7 +39,6 @@ export class Heart {
     canvas.height = this.canvasHeight;
     canvas.width = this.canvasWidth;
     this.context = canvas.getContext('2d');
-    this.context.moveTo(0, 0);
     this.timer = null;
     this.color = color;
     this.body = document.querySelector('body');
