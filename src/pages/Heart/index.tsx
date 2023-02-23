@@ -19,7 +19,6 @@ const HomePage: React.FC = () => {
   const [first, setfirst] = useState(true);
   // 浏览模式和编辑模式切换 false是浏览
   const [mode, setMode] = useState(false);
-  const objQs = qs.parse(location.search);
   const [obj, setObj] = useState({
     tips: '你是否准备好了？',
     title: '码上掘金',
@@ -27,25 +26,23 @@ const HomePage: React.FC = () => {
       '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长',
     color: ['#ee879d', '#f50', 'orange', 'gold', '#87d068', 'teal', '#108ee9', 'purple'],
     music: CONSTANT.music,
-    ...objQs,
+    ...qs.parse(location.search),
   });
-  useEffect(() => {
-    if (mode) {
-      setMode(false);
-      heart.clear();
-    }
-  }, [JSON.stringify(obj)]);
-
-  const strHour = moment().format('YYYY-MM-DD HH');
-  const shortHashHour = hash(strHour).slice(0, 7).toLocaleUpperCase();
-  const isHide = obj?.captcha?.toLocaleUpperCase() !== shortHashHour;
 
   useEffect(() => {
     setfirst(false);
     $root = document.querySelector('#root');
     $root?.setAttribute('style', `background: #000;`);
+    document.title = obj.title;
   }, []);
-
+  useEffect(() => {
+    if (mode) {
+      $root?.setAttribute('style', `background: #000;`);
+      document.title = obj.title;
+      setMode(false);
+      heart.clear();
+    }
+  }, [JSON.stringify(obj)]);
   useEffect(() => {
     if (!first && !mode) {
       heart = new Heart({
@@ -95,6 +92,10 @@ const HomePage: React.FC = () => {
       }
     }
   }, [first, mode]);
+
+  const strHour = moment().format('YYYY-MM-DD HH');
+  const shortHashHour = hash(strHour).slice(0, 7).toLocaleUpperCase();
+  const isHide = obj?.captcha?.toLocaleUpperCase() !== shortHashHour;
   const submit = ({ values = {}, copyTips, errorTips, btn, editTips }) => {
     const filterValues = Object.fromEntries(Object.entries(values).filter((item) => !!String(item[1]).replaceAll(' ', '')));
     const newObj = {
@@ -107,7 +108,6 @@ const HomePage: React.FC = () => {
       if (JSON.stringify(newObj) === JSON.stringify(obj)) {
         editTips();
       } else {
-        $root?.setAttribute('style', `background: #000;`);
         setObj(newObj);
       }
     }
