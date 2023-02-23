@@ -311,9 +311,12 @@ export class TypeWriting {
   }
 }
 
+const url = 'https://romantic.imtxp.cn';
+
 export const CONSTANT = {
-  music: 'htqic.imtxp.cn/music.mp3',
-  heart: 'https://romantic.imtxp.cn/heart.mp3',
-  type: 'https://romantic.imtxp.cn/type.mp3',
-  weixin: 'https://romantic.imtxp.cn/weixin.png',
+  url,
+  music: `${url}/music.mp3`,
+  heart: `${url}/heart.mp3`,
+  type: `${url}/type.mp3`,
+  weixin: `${url}/weixin.png`,
 };

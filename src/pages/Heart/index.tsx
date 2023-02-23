@@ -112,7 +112,7 @@ const HomePage: React.FC = () => {
       }
     }
     if (btn === 'copy') {
-      const text = `http://heart.imtxp.cn/?${qs.stringify(obj)}`;
+      const text = `${CONSTANT.url}/heart?${qs.stringify(obj)}`;
       try {
         if (navigator.clipboard) {
           // clipboard api 复制
