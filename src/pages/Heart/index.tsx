@@ -7,7 +7,7 @@ import Dialog from '@arco-design/mobile-react/esm/dialog';
 import Arco from './Arco';
 import Antd from './Antd';
 import './index.less';
-import { Heart, TypeWriting, CONSTANT } from './utils';
+import { Heart, TypeWriting, CONSTANT, copyText } from './utils';
 
 let heart;
 let typeWriting;
@@ -114,27 +114,8 @@ const HomePage: React.FC = () => {
     if (btn === 'copy') {
       const text = `${CONSTANT.url}/heart?${qs.stringify(obj)}`;
       try {
-        if (navigator.clipboard) {
-          // clipboard api 复制
-          navigator.clipboard.writeText(text);
-          copyTips();
-        } else {
-          const textarea = document.createElement('textarea');
-          document.body.appendChild(textarea);
-          // 隐藏此输入框
-          textarea.style.position = 'fixed';
-          textarea.style.clip = 'rect(0 0 0 0)';
-          textarea.style.top = '10px';
-          // 赋值
-          textarea.value = text;
-          // 选中
-          textarea.select();
-          // 复制
-          document.execCommand('copy', true);
-          // 移除输入框
-          document.body.removeChild(textarea);
-          copyTips();
-        }
+        copyText(text);
+        copyTips();
       } catch (error) {
         errorTips();
       }
