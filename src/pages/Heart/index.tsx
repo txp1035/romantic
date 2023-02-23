@@ -7,13 +7,12 @@ import Dialog from '@arco-design/mobile-react/esm/dialog';
 import Arco from './Arco';
 import Antd from './Antd';
 import './index.less';
-import { Heart, TypeWriting, MUSIC } from './utils';
+import { Heart, TypeWriting, CONSTANT } from './utils';
 
 let heart;
 let typeWriting;
 
-const isJuejin = false;
-
+const isJuejin = true;
 const HomePage: React.FC = () => {
   const [isClick, setIsClick] = useState(false);
   const [first, setfirst] = useState(true);
@@ -26,9 +25,10 @@ const HomePage: React.FC = () => {
     content:
       '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长',
     color: ['#ee879d', '#f50', 'orange', 'gold', '#87d068', 'teal', '#108ee9', 'purple'],
-    music: MUSIC.music,
+    music: CONSTANT.music,
     ...objQs,
   });
+  console.log(obj);
   useEffect(() => {
     if (mode) {
       setMode(false);
@@ -48,14 +48,14 @@ const HomePage: React.FC = () => {
     if (!first && !mode) {
       heart = new Heart({
         width: window.innerWidth * 0.8,
-        color: obj.color,
-        mp3: MUSIC.heart,
+        color: obj?.color || ['#ee879d', '#f50', 'orange', 'gold', '#87d068', 'teal', '#108ee9', 'purple'],
+        mp3: CONSTANT.heart,
       });
       const data = obj.content;
       typeWriting = new TypeWriting({
         select: '#content',
         content: data,
-        mp3: MUSIC.type,
+        mp3: CONSTANT.type,
         writing: () => {
           // 打字监听触底
           const $content = document.querySelector('#content');
@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
           onConfirm: () => {
             setIsClick(true);
             const music = document.querySelector('#music');
-            music?.setAttribute('src', obj.music);
+            music?.setAttribute('src', obj.music || CONSTANT.music);
             music.play();
             heart.draw();
             typeWriting.run();
@@ -94,15 +94,21 @@ const HomePage: React.FC = () => {
       }
     }
   }, [first, mode]);
-  const submit = ({ values, copyTips, errorTips, btn }) => {
-    const obj = {
-      ...values,
+  const submit = ({ values = {}, copyTips, errorTips, btn, editTips }) => {
+    const filterValues = Object.fromEntries(Object.entries(values).filter((item) => !!String(item[1]).replaceAll(' ', '')));
+    const newObj = {
+      ...filterValues,
     };
-    if (typeof values.color === 'string') {
-      obj.color = values.color.split(',').filter((item) => !!item);
+    if (typeof filterValues.color === 'string') {
+      newObj.color = filterValues?.color?.split(',').filter((item) => !!item);
     }
     if (btn === 'view') {
-      setObj(obj);
+      if (JSON.stringify(newObj) === JSON.stringify(obj)) {
+        editTips();
+      } else {
+        document.body?.setAttribute('style', `background: #000;${CONSTANT.body}`);
+        setObj(newObj);
+      }
     }
     if (btn === 'copy') {
       const text = `http://heart.imtxp.cn/?${qs.stringify(obj)}`;
@@ -140,7 +146,7 @@ const HomePage: React.FC = () => {
           <div id="noContent">
             {isClick && <h1>{obj.title}</h1>}
             <canvas id="heart"></canvas>
-            <audio loop id="music" src={MUSIC.music}></audio>
+            <audio loop id="music" src={CONSTANT.music}></audio>
           </div>
           <h2 id="content"></h2>
         </>
@@ -155,6 +161,7 @@ const HomePage: React.FC = () => {
                 <a
                   onClick={() => {
                     if (!mode) {
+                      document.body?.setAttribute('style', `background: #fff;`);
                       setMode(true);
                       typeWriting.stop();
                       heart.clear();

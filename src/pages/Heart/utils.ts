@@ -42,9 +42,9 @@ export class Heart {
     this.context.moveTo(0, 0);
     this.timer = null;
     this.color = color;
-
+    this.body = document.querySelector('body');
+    this.body?.setAttribute('style', `background: #000;`);
     if (mp3) {
-      this.body = document.querySelector('body');
       this.audio = document.createElement('audio');
       this.audio.setAttribute('src', mp3);
       this.audio.setAttribute('loop', true);
@@ -312,7 +312,7 @@ export class TypeWriting {
   }
 }
 
-export const MUSIC = {
+export const CONSTANT = {
   music: 'https://heart.imtxp.cn/music.mp3',
   heart: 'https://heart.imtxp.cn/heart.mp3',
   type: 'https://heart.imtxp.cn/type.mp3',

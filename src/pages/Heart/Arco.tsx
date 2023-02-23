@@ -12,28 +12,21 @@ import '@arco-design/mobile-react/esm/input/style';
 import Textarea from '@arco-design/mobile-react/esm/textarea';
 import '@arco-design/mobile-react/esm/textarea/style';
 
-let btn;
-
 export default function Arco({ obj, submit }) {
   const [form] = useForm();
+  const allTips = {
+    copyTips: () => {
+      Toast['success']('复制连接成功，到微信发送给你要分享的朋友');
+    },
+    errorTips: () => {
+      Toast['error']('失败请联系作者');
+    },
+    editTips: () => {
+      Toast['error']('要修改了内容才能浏览');
+    },
+  };
   return (
-    <Form
-      initialValues={obj}
-      style={{ background: '#fff' }}
-      form={form}
-      onSubmit={(values) => {
-        submit({
-          btn,
-          values,
-          copyTips: () => {
-            Toast['success']('复制成功');
-          },
-          errorTips: () => {
-            Toast['error']('失败请联系作者');
-          },
-        });
-      }}
-      layout="vertical">
+    <Form initialValues={obj} form={form} layout="vertical">
       <Form.Item field="tips" label="提示" required>
         <Input placeholder="请输入提示" />
       </Form.Item>
@@ -53,24 +46,35 @@ export default function Arco({ obj, submit }) {
         <Input placeholder="输入心跳颜色" />
       </Form.Item>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Button
+          style={{ marginRight: 10 }}
+          bgColor="#1e80ff"
           inline
           size="medium"
           onClick={() => {
-            btn = 'view';
-            form.submit();
+            const values = form.getFieldsValue();
+            submit({
+              btn: 'view',
+              values,
+              ...allTips,
+            });
           }}>
           浏览效果
         </Button>
         <Button
           inline
           size="medium"
+          bgColor="#00b578"
           onClick={() => {
-            btn = 'copy';
-            form.submit();
+            const values = form.getFieldsValue();
+            submit({
+              btn: 'copy',
+              values,
+              ...allTips,
+            });
           }}>
-          复制链接分享给微信朋友
+          分享到微信
         </Button>
       </div>
     </Form>

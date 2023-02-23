@@ -1,48 +1,63 @@
 import { Toast, Form, Input, TextArea, Button, Space } from 'antd-mobile';
 
-let btn;
 export default function Antd({ obj, submit }) {
+  const [form] = Form.useForm();
+  const allTips = {
+    copyTips: () => {
+      Toast.show({
+        icon: 'success',
+        content: '复制连接成功，到微信发送给你要分享的朋友',
+      });
+    },
+    errorTips: () => {
+      Toast.show({
+        icon: 'fail',
+        content: '失败请联系作者',
+      });
+    },
+    editTips: () => {
+      Toast.show({
+        icon: 'fail',
+        content: '要修改了内容才能浏览',
+      });
+    },
+  };
   return (
     <Form
+      form={form}
       initialValues={obj}
-      onFinish={(values: any) => {
-        submit({
-          values,
-          btn,
-          copyTips: () => {
-            Toast.show({
-              icon: 'success',
-              content: '复制成功',
-            });
-          },
-          errorTips: () => {
-            Toast.show({
-              icon: 'fail',
-              content: '失败请联系作者',
-            });
-          },
-        });
-      }}>
-      <Space wrap justify="center" block align="center">
-        <Button
-          block
-          onClick={() => {
-            btn = 'view';
-          }}
-          type="submit"
-          color="primary">
-          浏览效果
-        </Button>
-        <Button
-          block
-          onClick={() => {
-            btn = 'copy';
-          }}
-          type="submit"
-          color="success">
-          复制链接
-        </Button>
-      </Space>
+      footer={
+        <Space wrap block justify="center" align="center">
+          <Button
+            size="small"
+            onClick={() => {
+              const values = form.getFieldsValue();
+              submit({
+                values,
+                btn: 'view',
+                ...allTips,
+              });
+            }}
+            type="submit"
+            color="primary">
+            浏览效果
+          </Button>
+          <Button
+            size="small"
+            onClick={() => {
+              const values = form.getFieldsValue();
+              submit({
+                values,
+                btn: 'copy',
+                ...allTips,
+              });
+            }}
+            type="submit"
+            color="success">
+            分享到微信
+          </Button>
+        </Space>
+      }>
       <Form.Item name="tips" label="提示" rules={[{ required: true, message: '提示不能为空' }]}>
         <Input placeholder="请输入提示" />
       </Form.Item>
