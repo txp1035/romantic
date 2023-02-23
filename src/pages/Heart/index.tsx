@@ -12,7 +12,7 @@ import { Heart, TypeWriting, CONSTANT } from './utils';
 let heart;
 let typeWriting;
 
-const isJuejin = true;
+const isJuejin = false;
 const HomePage: React.FC = () => {
   const [isClick, setIsClick] = useState(false);
   const [first, setfirst] = useState(true);
