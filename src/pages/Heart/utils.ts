@@ -43,7 +43,6 @@ export class Heart {
     this.timer = null;
     this.color = color;
     this.body = document.querySelector('body');
-    this.body?.setAttribute('style', `background: #000;`);
     if (mp3) {
       this.audio = document.createElement('audio');
       this.audio.setAttribute('src', mp3);
