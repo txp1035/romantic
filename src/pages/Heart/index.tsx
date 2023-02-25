@@ -112,7 +112,7 @@ const HomePage: React.FC = () => {
       }
     }
     if (btn === 'copy') {
-      const text = `${CONSTANT.url}/heart?${qs.stringify(obj)}`;
+      const text = `${CONSTANT.url}/heart?${qs.stringify(newObj)}`;
       try {
         copyText(text);
         copyTips();
