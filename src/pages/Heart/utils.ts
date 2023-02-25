@@ -323,14 +323,19 @@ export const CONSTANT = {
 export const copyText = function (content: string) {
   if (!navigator.clipboard) {
     let textarea = document.createElement('textarea');
+    // 隐藏此输入框
     textarea.style.width = 0;
     textarea.style.position = 'fixed';
     textarea.style.left = '-999px';
     textarea.style.top = '10px';
     textarea.setAttribute('readonly', 'readonly');
+    // 插入元素
     document.body.appendChild(textarea);
+    // 赋值
     textarea.value = content;
+    // 选中
     textarea.select();
+    // 复制
     document.execCommand('copy', true);
   } else {
     navigator.clipboard.writeText(content).then(

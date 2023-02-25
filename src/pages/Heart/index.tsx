@@ -149,7 +149,7 @@ const HomePage: React.FC = () => {
                     heart.clear();
                   }
                 }}>
-                自定义此页面（基于此模板）
+                自定义此页面
               </a>
             </div>
           )}
@@ -171,7 +171,7 @@ const HomePage: React.FC = () => {
                 }}>
                 「道源1035」
               </a>
-              提供支持
+              提供支持【v1.0.0】
             </div>
           )}
         </div>
