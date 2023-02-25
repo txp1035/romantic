@@ -31,7 +31,6 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     setfirst(false);
-
     document.body.setAttribute('style', ` background-image: url('/bg.jpg');`);
     document.title = obj.title;
   }, []);
@@ -136,8 +135,8 @@ const HomePage: React.FC = () => {
       )}
       {mode && !isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
       {mode && isJuejin && <Arco obj={obj} setObj={setObj} submit={submit} />}
-      <h3>
-        <div className="author">
+      <div className="footer">
+        <div className="box">
           {!mode && (
             <div>
               <a
@@ -176,7 +175,7 @@ const HomePage: React.FC = () => {
             </div>
           )}
         </div>
-      </h3>
+      </div>
     </div>
   );
 };
