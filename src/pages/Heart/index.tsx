@@ -27,17 +27,18 @@ const HomePage: React.FC = () => {
       '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长',
     color: ['#ee879d', 'rgb(255, 0, 0)', 'rgb(255, 165, 0)', 'rgb(255, 255, 0)', 'rgb(0, 255, 0)', 'rgb(0, 255, 255)', 'rgb(0, 0, 255)', 'rgb(139, 0, 255)'],
     music: CONSTANT.music,
+    bgImg: CONSTANT.bg,
     ...qs.parse(location.search),
   });
 
   useEffect(() => {
     setfirst(false);
-    document.body.setAttribute('style', `background-image: url('${CONSTANT.bg}');`);
+    document.body.setAttribute('style', `background-image: url('${obj.bgImg}');`);
     document.title = obj.title;
   }, []);
   useEffect(() => {
     if (mode) {
-      document.body.setAttribute('style', `background-image: url('${CONSTANT.bg}');`);
+      document.body.setAttribute('style', `background-image: url('${obj.bgImg}');`);
       document.title = obj.title;
       setMode(false);
       heart.clear();

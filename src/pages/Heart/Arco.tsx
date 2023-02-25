@@ -46,6 +46,9 @@ export default function Arco({ obj, submit }) {
         <Form.Item field="color" label="心跳颜色">
           <Input placeholder="输入心跳颜色" />
         </Form.Item>
+        <Form.Item field="bgImg" label="背景图片">
+          <Input placeholder="输入背景图片" />
+        </Form.Item>
       </Form>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Button

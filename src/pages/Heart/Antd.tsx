@@ -48,6 +48,9 @@ export default function Antd({ obj, submit }) {
         <Form.Item name="color" label="心跳颜色">
           <Input placeholder="输入心跳颜色" />
         </Form.Item>
+        <Form.Item name="bgImg" label="背景图片">
+          <Input placeholder="输入背景图片" />
+        </Form.Item>
       </Form>
 
       <Space wrap block justify="center" align="center">
