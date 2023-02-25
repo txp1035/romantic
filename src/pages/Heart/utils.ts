@@ -320,8 +320,9 @@ export const CONSTANT = {
   weixin: `${url}/weixin.png`,
 };
 
-export const copyText = function (content: string) {
-  if (!navigator.clipboard) {
+export const copyText = function (content: string, forceDowngrade: boolean = false) {
+  const isDowngrade = forceDowngrade || !navigator.clipboard;
+  if (isDowngrade) {
     // 降级
     let textarea = document.createElement('textarea');
     // 隐藏此输入框
@@ -338,12 +339,14 @@ export const copyText = function (content: string) {
     textarea.select();
     // 复制
     document.execCommand('copy', true);
+    // 移除输入框
+    document.body.removeChild(textarea);
   } else {
     navigator.clipboard.writeText(content).then(
       function () {},
       function () {
         // 禁止写入剪切板后使用兜底方法
-        copyText(content, false);
+        copyText(content, true);
       }
     );
   }
