@@ -12,19 +12,20 @@ import { Heart, TypeWriting, CONSTANT, copyText } from './utils';
 let heart;
 let typeWriting;
 
-const isJuejin = false;
+const isJuejin = true;
 
 const HomePage: React.FC = () => {
   const [isClick, setIsClick] = useState(false);
   const [first, setfirst] = useState(true);
   // 浏览模式和编辑模式切换 false是浏览
   const [mode, setMode] = useState(false);
+
   const [obj, setObj] = useState({
     tips: '你是否准备好了？',
     title: '码上掘金',
     content:
       '码上掘金是由稀土掘金推出的在线code playground服务，在这里，无需搭建复杂的开发环境即可实现代码效果的即时预览、演示。\n如何用「码上掘金」玩出花？\n快来参与竞赛，将灵感变为现实！\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长\n测试超长',
-    color: ['#ee879d', '#f50', 'orange', 'gold', '#87d068', 'teal', '#108ee9', 'purple'],
+    color: ['#ee879d', 'rgb(255, 0, 0)', 'rgb(255, 165, 0)', 'rgb(255, 255, 0)', 'rgb(0, 255, 0)', 'rgb(0, 255, 255)', 'rgb(0, 0, 255)', 'rgb(139, 0, 255)'],
     music: CONSTANT.music,
     ...qs.parse(location.search),
   });
@@ -131,51 +132,59 @@ const HomePage: React.FC = () => {
             <audio loop id="music" src={CONSTANT.music}></audio>
           </div>
           <div id="content"></div>
+          <div className="footer">
+            <div className="box">
+              {!mode && (
+                <div>
+                  <a
+                    onClick={() => {
+                      if (!mode) {
+                        setMode(true);
+                        typeWriting.stop();
+                        heart.clear();
+                      }
+                    }}>
+                    自定义此页面
+                  </a>
+                </div>
+              )}
+              {isHide && (
+                <div>
+                  由公众号
+                  <a
+                    onClick={() => {
+                      if (!isJuejin) {
+                        Modal.alert({
+                          title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
+                        });
+                      } else {
+                        Dialog.alert({
+                          title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
+                          platform: 'ios',
+                        });
+                      }
+                    }}>
+                    「道源1035」
+                  </a>
+                  提供支持【v1.0.1】
+                </div>
+              )}
+            </div>
+          </div>
         </>
       )}
-      {mode && !isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
-      {mode && isJuejin && <Arco obj={obj} setObj={setObj} submit={submit} />}
-      <div className="footer">
-        <div className="box">
-          {!mode && (
-            <div>
-              <a
-                onClick={() => {
-                  if (!mode) {
-                    // 要发掘金不能直接给body赋值
-                    document.body.setAttribute('style', `background: #fff;`);
-                    setMode(true);
-                    typeWriting.stop();
-                    heart.clear();
-                  }
-                }}>
-                自定义此页面
-              </a>
-            </div>
-          )}
-          {isHide && (
-            <div>
-              由公众号
-              <a
-                onClick={() => {
-                  if (!isJuejin) {
-                    Modal.alert({
-                      title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
-                    });
-                  } else {
-                    Dialog.alert({
-                      title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
-                      platform: 'ios',
-                    });
-                  }
-                }}>
-                「道源1035」
-              </a>
-              提供支持【v1.0.1】
-            </div>
-          )}
+
+      {mode && (
+        <div className="form">
+          <div className="formBg">
+            <img src="/form/top.jpg" alt="" />
+            <div className="middle"></div>
+            <img src="/form/bottom.jpg" alt="" />
+          </div>
+          {!isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
+          {isJuejin && <Arco obj={obj} setObj={setObj} submit={submit} />}
         </div>
-      </div>
+      )}
     </div>
   );
 };

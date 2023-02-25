@@ -26,26 +26,27 @@ export default function Arco({ obj, submit }) {
     },
   };
   return (
-    <Form initialValues={obj} form={form} layout="vertical">
-      <Form.Item field="tips" label="提示" required>
-        <Input placeholder="请输入提示" />
-      </Form.Item>
-      <Form.Item field="title" label="标题" required>
-        <Input placeholder="请输入标题" />
-      </Form.Item>
-      <Form.Item field="content" label="内容" required>
-        <Textarea rows={10} placeholder="请输入内容" />
-      </Form.Item>
-      <Form.Item field="captcha" label="影藏作者信息(关注公众号，发送heart获取解除验证码)">
-        <Input placeholder="输入验证码" />
-      </Form.Item>
-      <Form.Item field="music" label="背景音乐">
-        <Input placeholder="输入背景音乐连接" />
-      </Form.Item>
-      <Form.Item field="color" label="心跳颜色">
-        <Input placeholder="输入心跳颜色" />
-      </Form.Item>
-
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', marginTop: 110 }}>
+      <Form style={{ background: '#fff', height: '70vh', overflow: 'auto', width: '80%', marginBottom: 20 }} initialValues={obj} form={form} layout="vertical">
+        <Form.Item field="tips" label="提示" required>
+          <Input placeholder="请输入提示" />
+        </Form.Item>
+        <Form.Item field="title" label="标题" required>
+          <Input placeholder="请输入标题" />
+        </Form.Item>
+        <Form.Item field="content" label="内容" required>
+          <Textarea rows={10} placeholder="请输入内容" />
+        </Form.Item>
+        <Form.Item field="captcha" label="影藏作者信息(关注公众号，发送heart获取解除验证码)">
+          <Input placeholder="输入验证码" />
+        </Form.Item>
+        <Form.Item field="music" label="背景音乐">
+          <Input placeholder="输入背景音乐连接" />
+        </Form.Item>
+        <Form.Item field="color" label="心跳颜色">
+          <Input placeholder="输入心跳颜色" />
+        </Form.Item>
+      </Form>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Button
           style={{ marginRight: 10 }}
@@ -77,6 +78,6 @@ export default function Arco({ obj, submit }) {
           分享到微信
         </Button>
       </div>
-    </Form>
+    </div>
   );
 }
