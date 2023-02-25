@@ -22,6 +22,22 @@ export default function Antd({ obj, submit }) {
       });
     },
   };
+  const urlRules = [
+    {
+      validator: (val, callback) => {
+        const isUrl = /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/;
+        if (!val) {
+          callback();
+        } else {
+          if (!isUrl.test(val)) {
+            callback('请输入正确的url');
+          } else {
+            callback();
+          }
+        }
+      },
+    },
+  ];
   return (
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', marginTop: 110 }}>
       <Form style={{ height: '70vh', overflow: 'auto', width: '80%', marginBottom: 20 }} form={form} initialValues={obj}>
@@ -42,13 +58,13 @@ export default function Antd({ obj, submit }) {
         <Form.Item name="captcha" label="影藏作者信息(关注公众号，发送heart获取解除验证码)">
           <Input placeholder="输入验证码" />
         </Form.Item>
-        <Form.Item name="music" label="背景音乐">
+        <Form.Item name="music" label="背景音乐" rules={urlRules}>
           <Input placeholder="输入背景音乐连接" />
         </Form.Item>
         <Form.Item name="color" label="心跳颜色">
           <Input placeholder="输入心跳颜色" />
         </Form.Item>
-        <Form.Item name="bgImg" label="背景图片">
+        <Form.Item name="bgImg" label="背景图片" rules={urlRules}>
           <Input placeholder="输入背景图片" />
         </Form.Item>
       </Form>

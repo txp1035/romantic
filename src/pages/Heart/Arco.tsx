@@ -1,5 +1,4 @@
 import setRootPixel from '@arco-design/mobile-react/tools/flexible';
-setRootPixel();
 import Button from '@arco-design/mobile-react/esm/button';
 import '@arco-design/mobile-react/esm/button/style';
 import '@arco-design/mobile-react/esm/dialog/style';
@@ -11,6 +10,8 @@ import Input from '@arco-design/mobile-react/esm/input';
 import '@arco-design/mobile-react/esm/input/style';
 import Textarea from '@arco-design/mobile-react/esm/textarea';
 import '@arco-design/mobile-react/esm/textarea/style';
+
+setRootPixel();
 
 export default function Arco({ obj, submit }) {
   const [form] = useForm();
@@ -25,6 +26,24 @@ export default function Arco({ obj, submit }) {
       Toast['error']('要修改了内容才能浏览');
     },
   };
+
+  const urlRules = [
+    {
+      validator: (val, callback) => {
+        const isUrl = /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/;
+        if (!val) {
+          callback();
+        } else {
+          if (!isUrl.test(val)) {
+            callback('请输入正确的url');
+          } else {
+            callback();
+          }
+        }
+      },
+    },
+  ];
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', marginTop: 110 }}>
       <Form style={{ background: '#fff', height: '70vh', overflow: 'auto', width: '80%', marginBottom: 20 }} initialValues={obj} form={form} layout="vertical">
@@ -40,13 +59,13 @@ export default function Arco({ obj, submit }) {
         <Form.Item field="captcha" label="影藏作者信息(关注公众号，发送heart获取解除验证码)">
           <Input placeholder="输入验证码" />
         </Form.Item>
-        <Form.Item field="music" label="背景音乐">
+        <Form.Item field="music" rules={urlRules} label="背景音乐">
           <Input placeholder="输入背景音乐连接" />
         </Form.Item>
         <Form.Item field="color" label="心跳颜色">
           <Input placeholder="输入心跳颜色" />
         </Form.Item>
-        <Form.Item field="bgImg" label="背景图片">
+        <Form.Item field="bgImg" rules={urlRules} label="背景图片">
           <Input placeholder="输入背景图片" />
         </Form.Item>
       </Form>
