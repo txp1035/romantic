@@ -126,11 +126,11 @@ const HomePage: React.FC = () => {
       {!mode && (
         <>
           <div id="noContent">
-            {isClick && <h1>{obj.title}</h1>}
+            {isClick && <div className="title">{obj.title}</div>}
             <canvas id="heart"></canvas>
             <audio loop id="music" src={CONSTANT.music}></audio>
           </div>
-          <h2 id="content"></h2>
+          <div id="content"></div>
         </>
       )}
       {mode && !isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
