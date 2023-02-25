@@ -13,7 +13,7 @@ let heart;
 let typeWriting;
 
 const isJuejin = false;
-let $root;
+
 const HomePage: React.FC = () => {
   const [isClick, setIsClick] = useState(false);
   const [first, setfirst] = useState(true);
@@ -31,13 +31,13 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     setfirst(false);
-    $root = document.querySelector('#root');
-    $root?.setAttribute('style', `background: #000;`);
+
+    document.body.setAttribute('style', ` background-image: url('/bg.jpg');`);
     document.title = obj.title;
   }, []);
   useEffect(() => {
     if (mode) {
-      $root?.setAttribute('style', `background: #000;`);
+      document.body.setAttribute('style', ` background-image: url('/bg.jpg');`);
       document.title = obj.title;
       setMode(false);
       heart.clear();
@@ -59,6 +59,7 @@ const HomePage: React.FC = () => {
           // 打字监听触底
           const $content = document.querySelector('#content');
           const $noContent = document.querySelector('#noContent');
+          const $root = document.querySelector('#root');
           const all = $root?.clientHeight - 24 - $noContent.scrollHeight;
           if (all < $content?.scrollHeight) {
             $root.scrollTop = $root.scrollHeight;
@@ -143,7 +144,7 @@ const HomePage: React.FC = () => {
                 onClick={() => {
                   if (!mode) {
                     // 要发掘金不能直接给body赋值
-                    $root?.setAttribute('style', `background: #fff;`);
+                    document.body.setAttribute('style', `background: #fff;`);
                     setMode(true);
                     typeWriting.stop();
                     heart.clear();
