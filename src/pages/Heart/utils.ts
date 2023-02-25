@@ -318,6 +318,9 @@ export const CONSTANT = {
   heart: `${url}/heart.mp3`,
   type: `${url}/type.mp3`,
   weixin: `${url}/weixin.png`,
+  top: `${url}/form/top.jpg`,
+  bottom: `${url}/form/bottom.jpg`,
+  bg: `${url}/bg.jpg`,
 };
 
 export const copyText = function (content: string, forceDowngrade: boolean = false) {

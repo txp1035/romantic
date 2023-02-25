@@ -32,12 +32,12 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     setfirst(false);
-    document.body.setAttribute('style', ` background-image: url('/bg.jpg');`);
+    document.body.setAttribute('style', `background-image: url('${CONSTANT.bg}');`);
     document.title = obj.title;
   }, []);
   useEffect(() => {
     if (mode) {
-      document.body.setAttribute('style', ` background-image: url('/bg.jpg');`);
+      document.body.setAttribute('style', `background-image: url('${CONSTANT.bg}');`);
       document.title = obj.title;
       setMode(false);
       heart.clear();
@@ -177,9 +177,9 @@ const HomePage: React.FC = () => {
       {mode && (
         <div className="form">
           <div className="formBg">
-            <img src="/form/top.jpg" alt="" />
+            <img src={CONSTANT.top} alt="" />
             <div className="middle"></div>
-            <img src="/form/bottom.jpg" alt="" />
+            <img src={CONSTANT.bottom} alt="" />
           </div>
           {!isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
           {isJuejin && <Arco obj={obj} setObj={setObj} submit={submit} />}
