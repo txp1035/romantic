@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import hash from 'object-hash';
 import moment from 'dayjs';
 import qs from 'query-string';
-import { Modal } from 'antd-mobile';
+import { Modal, Toast } from 'antd-mobile';
 import Dialog from '@arco-design/mobile-react/esm/dialog';
 import Arco from './Arco';
 import Antd from './Antd';
 import './index.less';
-import { Heart, TypeWriting, CONSTANT, copyText } from './utils';
+import { Heart, TypeWriting, CONSTANT, copyText, preLoadImg } from './utils';
 
 let heart;
 let typeWriting;
@@ -32,9 +32,21 @@ const HomePage: React.FC = () => {
   });
 
   useEffect(() => {
-    setfirst(false);
     document.body.setAttribute('style', `background-image: url('${obj.bgImg}');`);
     document.title = obj.title;
+    const arr = [CONSTANT.bg, CONSTANT.top, CONSTANT.middle, CONSTANT.bottom, CONSTANT.weixin];
+    preLoadImg(arr, (num) => {
+      if (num === 1) {
+        Toast.clear();
+        setfirst(false);
+      } else {
+        Toast.show({
+          icon: 'loading',
+          content: `加载中…${num * 100}%`,
+          duration: 0,
+        });
+      }
+    });
   }, []);
   useEffect(() => {
     if (mode) {
@@ -123,6 +135,13 @@ const HomePage: React.FC = () => {
       }
     }
   };
+  const preLoadImgs = {
+    weixin: <img src={CONSTANT.weixin} alt="weixin" width="100%" />,
+    bg: <img src={CONSTANT.bg} alt="bg" width="100%" />,
+    top: <img src={CONSTANT.top} alt="top" width="100%" />,
+    middle: <img src={CONSTANT.middle} alt="middle" width="100%" />,
+    bottom: <img src={CONSTANT.bottom} alt="bottom" width="100%" />,
+  };
   return (
     <div className="container">
       {!mode && (
@@ -156,11 +175,11 @@ const HomePage: React.FC = () => {
                     onClick={() => {
                       if (!isJuejin) {
                         Modal.alert({
-                          title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
+                          title: preLoadImgs.weixin,
                         });
                       } else {
                         Dialog.alert({
-                          title: <img src={CONSTANT.weixin} alt="二维码" width="100%" />,
+                          title: preLoadImgs.weixin,
                           platform: 'ios',
                         });
                       }
@@ -178,14 +197,21 @@ const HomePage: React.FC = () => {
       {mode && (
         <div className="form">
           <div className="formBg">
-            <img src={CONSTANT.top} alt="" />
+            {preLoadImgs.top}
             <div className="middle"></div>
-            <img src={CONSTANT.bottom} alt="" />
+            {preLoadImgs.bottom}
           </div>
           {!isJuejin && <Antd obj={obj} setObj={setObj} submit={submit} />}
           {isJuejin && <Arco obj={obj} setObj={setObj} submit={submit} />}
         </div>
       )}
+      <div style={{ display: 'none' }}>
+        {preLoadImgs.weixin}
+        {preLoadImgs.bg}
+        {preLoadImgs.top}
+        {preLoadImgs.middle}
+        {preLoadImgs.bottom}
+      </div>
     </div>
   );
 };

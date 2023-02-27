@@ -317,13 +317,14 @@ export const CONSTANT = {
   music: `${url}/music.mp3`,
   heart: `${url}/heart.mp3`,
   type: `${url}/type.mp3`,
-  weixin: `${url}/weixin.png`,
+  weixin: `${url}/weixin.jpg`,
   top: `${url}/form/top.jpg`,
+  middle: `${url}/form/middle.jpg`,
   bottom: `${url}/form/bottom.jpg`,
   bg: `${url}/bg.jpg`,
 };
 
-export const copyText = function (content: string, forceDowngrade: boolean = false) {
+export const copyText = (content: string, forceDowngrade: boolean = false) => {
   const isDowngrade = forceDowngrade || !navigator.clipboard;
   if (isDowngrade) {
     // 降级
@@ -353,4 +354,26 @@ export const copyText = function (content: string, forceDowngrade: boolean = fal
       }
     );
   }
+};
+
+export const preLoadImg = (imgArr: string[], loadState = (progress: number) => {}) => {
+  let num = imgArr.length;
+  let loading = 0;
+  let start = +new Date();
+  function add() {
+    loadState(loading / num);
+    if (loading == num - 1) {
+      loading = num;
+      loadState(1);
+      console.log('加载图片耗时', +new Date() - start);
+    }
+    loading++;
+  }
+  imgArr.forEach((item) => {
+    let imgs = new Image();
+    imgs.src = item;
+    imgs.onload = function () {
+      add();
+    };
+  });
 };
