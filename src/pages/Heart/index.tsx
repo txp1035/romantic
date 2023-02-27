@@ -10,7 +10,7 @@ import { Heart, TypeWriting, CONSTANT, copyText, preLoadImg } from './utils';
 let heart;
 let typeWriting;
 
-const isJuejin = true;
+const isJuejin = false;
 
 const HomePage: React.FC = () => {
   const [isClick, setIsClick] = useState(false);
