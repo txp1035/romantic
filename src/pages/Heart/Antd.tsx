@@ -1,6 +1,7 @@
-import { Toast, Form, Input, TextArea, Button, Space } from 'antd-mobile';
+import { Toast, Form, Input, TextArea, Button, Space, Modal } from 'antd-mobile';
 
 export const ToastAntd = Toast;
+export const ModalAntd = Modal;
 
 export default function Antd({ obj, submit }) {
   const [form] = Form.useForm();

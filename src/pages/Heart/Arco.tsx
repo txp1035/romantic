@@ -10,10 +10,12 @@ import Input from '@arco-design/mobile-react/esm/input';
 import '@arco-design/mobile-react/esm/input/style';
 import Textarea from '@arco-design/mobile-react/esm/textarea';
 import '@arco-design/mobile-react/esm/textarea/style';
+import Dialog from '@arco-design/mobile-react/esm/dialog';
 
 setRootPixel();
 
 export const ToastArco = Toast;
+export const DialogArco = Dialog;
 
 export default function Arco({ obj, submit }) {
   const [form] = useForm();

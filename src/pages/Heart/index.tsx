@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 import hash from 'object-hash';
 import moment from 'dayjs';
 import qs from 'query-string';
-import { Modal } from 'antd-mobile';
-import Dialog from '@arco-design/mobile-react/esm/dialog';
-import Arco, { ToastArco } from './Arco';
-import Antd, { ToastAntd } from './Antd';
+import Arco, { ToastArco, DialogArco } from './Arco';
+import Antd, { ToastAntd, ModalAntd } from './Antd';
 import './index.less';
 import { Heart, TypeWriting, CONSTANT, copyText, preLoadImg } from './utils';
 
@@ -98,7 +96,7 @@ const HomePage: React.FC = () => {
         },
       });
       if (!isJuejin) {
-        Modal.alert({
+        ModalAntd.alert({
           title: obj.tips,
           onConfirm: () => {
             setIsClick(true);
@@ -110,7 +108,7 @@ const HomePage: React.FC = () => {
           },
         });
       } else {
-        Dialog.alert({
+        DialogArco.alert({
           title: obj.tips,
           platform: 'ios',
           onOk: () => {
@@ -192,11 +190,11 @@ const HomePage: React.FC = () => {
                   <a
                     onClick={() => {
                       if (!isJuejin) {
-                        Modal.alert({
+                        ModalAntd.alert({
                           title: preLoadImgs.weixin,
                         });
                       } else {
-                        Dialog.alert({
+                        DialogArco.alert({
                           title: preLoadImgs.weixin,
                           platform: 'ios',
                         });
