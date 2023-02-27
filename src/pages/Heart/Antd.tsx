@@ -1,5 +1,7 @@
 import { Toast, Form, Input, TextArea, Button, Space } from 'antd-mobile';
 
+export const ToastAntd = Toast;
+
 export default function Antd({ obj, submit }) {
   const [form] = Form.useForm();
   const allTips = {

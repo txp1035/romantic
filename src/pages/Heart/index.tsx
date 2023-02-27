@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import hash from 'object-hash';
 import moment from 'dayjs';
 import qs from 'query-string';
-import { Modal, Toast } from 'antd-mobile';
+import { Modal } from 'antd-mobile';
 import Dialog from '@arco-design/mobile-react/esm/dialog';
-import Arco from './Arco';
-import Antd from './Antd';
+import Arco, { ToastArco } from './Arco';
+import Antd, { ToastAntd } from './Antd';
 import './index.less';
 import { Heart, TypeWriting, CONSTANT, copyText, preLoadImg } from './utils';
 
@@ -35,16 +35,34 @@ const HomePage: React.FC = () => {
     document.body.setAttribute('style', `background-image: url('${obj.bgImg}');`);
     document.title = obj.title;
     const arr = [CONSTANT.bg, CONSTANT.top, CONSTANT.middle, CONSTANT.bottom, CONSTANT.weixin];
+    if (isJuejin) {
+      window.toastInstance = ToastArco['loading']({
+        content: '加载中...',
+        loadingInner: `0%`,
+        disableBodyTouch: true,
+        loading: true,
+      });
+    }
     preLoadImg(arr, (num) => {
       if (num === 1) {
-        Toast.clear();
+        if (isJuejin) {
+          window.toastInstance.close();
+        } else {
+          ToastAntd.clear();
+        }
         setfirst(false);
       } else {
-        Toast.show({
-          icon: 'loading',
-          content: `加载中…${num * 100}%`,
-          duration: 0,
-        });
+        if (isJuejin) {
+          window.toastInstance.update({
+            loadingInner: `${num * 100}%`,
+          });
+        } else {
+          ToastAntd.show({
+            icon: 'loading',
+            content: `加载中…${num * 100}%`,
+            duration: 0,
+          });
+        }
       }
     });
   }, []);

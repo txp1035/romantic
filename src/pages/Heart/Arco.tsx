@@ -13,6 +13,8 @@ import '@arco-design/mobile-react/esm/textarea/style';
 
 setRootPixel();
 
+export const ToastArco = Toast;
+
 export default function Arco({ obj, submit }) {
   const [form] = useForm();
   const allTips = {
