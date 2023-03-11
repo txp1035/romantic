@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
 
   const [obj, setObj] = useState({
     tips: 'Are you ready？',
-    title: '程序员的凉面',
+    title: 'chatgpt生成的💌',
     content: `亲爱的，
 随着每一个晨曦和夜幕，我的思绪仍旧飞扬在你的身上。当我想起你那迷人的微笑和温柔的眼神，我的心便为你所俘虏，无法自拔。
 每一次我和你在一起，我的世界便充满了爱与幸福。我感觉到你的存在让我的生命充满了意义，而我的心灵也被你所彻底地温暖和治愈。
