@@ -33,19 +33,19 @@ export class Heart {
     // this.isHideAroundPoints = true
   }
 
-  private init({ color = ['#ee879d'], mp3 }) {
+  private init({ color = ["#ee879d"], mp3 }) {
     // 画布
-    const canvas = document.querySelector('#heart');
+    const canvas = document.querySelector("#heart");
     canvas.height = this.canvasHeight;
     canvas.width = this.canvasWidth;
-    this.context = canvas.getContext('2d');
+    this.context = canvas.getContext("2d");
     this.timer = null;
     this.color = color;
-    this.body = document.querySelector('body');
+    this.body = document.querySelector("body");
     if (mp3) {
-      this.audio = document.createElement('audio');
-      this.audio.setAttribute('src', mp3);
-      this.audio.setAttribute('loop', true);
+      this.audio = document.createElement("audio");
+      this.audio.setAttribute("src", mp3);
+      this.audio.setAttribute("loop", true);
       this.body.appendChild(this.audio);
     }
 
@@ -85,7 +85,12 @@ export class Heart {
   private generatePoint(t, multiple = this.multiple) {
     let x = 16 * Math.sin(t) ** 3;
     // 因为canvas的y轴向下为正向上为负所以要加一个负号
-    let y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+    let y = -(
+      13 * Math.cos(t) -
+      5 * Math.cos(2 * t) -
+      2 * Math.cos(3 * t) -
+      Math.cos(4 * t)
+    );
     return {
       // 默认爱心宽：33，高：30
       // 给坐标放大倍数、从画布中心点开始画
@@ -162,17 +167,22 @@ export class Heart {
   }
   private initFpsPoints(f) {
     // 控制心跳幅度，最后一个随机
-    const range = (this.heartbeatAmplitude * Heart.sport((f / 10) * Math.PI)) / 1;
+    const range =
+      (this.heartbeatAmplitude * Heart.sport((f / 10) * Math.PI)) / 1;
     // 得到半径
     const radius = parseInt(4 + 6 * (1 + Heart.sport((f / 10) * Math.PI)));
     const allPoints = [];
     const aroundPoints = [];
-    const number = this.isHideAroundPoints ? 0 : parseInt(3000 + 4000 * Math.abs(Heart.sport((f / 10) * Math.PI) ** 2));
+    const number = this.isHideAroundPoints
+      ? 0
+      : parseInt(3000 + 4000 * Math.abs(Heart.sport((f / 10) * Math.PI) ** 2));
     for (let index = 0; index < number; index++) {
       const t = Heart.random(0, 4 * Math.PI);
       const point = this.generatePoint(t, this.aroundMultiple);
       const res = this.shrink(point.x, point.y, radius);
-      if (aroundPoints.every((point) => point.x !== res.x && point.y !== res.y)) {
+      if (
+        aroundPoints.every((point) => point.x !== res.x && point.y !== res.y)
+      ) {
         aroundPoints.push({
           x: res.x,
           y: res.y,
@@ -271,12 +281,12 @@ export class TypeWriting {
     this.select = select;
     this.writing = writing;
     this.dom = document.querySelector(select);
-    this.content = content.split('');
+    this.content = content.split("");
     if (mp3) {
-      this.body = document.querySelector('body');
-      this.audio = document.createElement('audio');
-      this.audio.setAttribute('src', mp3);
-      this.audio.setAttribute('loop', true);
+      this.body = document.querySelector("body");
+      this.audio = document.createElement("audio");
+      this.audio.setAttribute("src", mp3);
+      this.audio.setAttribute("loop", true);
       this.body.appendChild(this.audio);
     }
   }
@@ -286,7 +296,7 @@ export class TypeWriting {
     }
     that.writing();
     if (index < that.content.length) {
-      const str = that.content[index] === '\n' ? '<br/>' : that.content[index];
+      const str = that.content[index] === "\n" ? "<br/>" : that.content[index];
       that.dom.innerHTML += str;
       setTimeout(that.writer, 80, index + 1, that);
     } else {
@@ -310,7 +320,7 @@ export class TypeWriting {
   }
 }
 
-const url = 'https://romantic.imtxp.cn';
+const url = "https://heart-tawny-nu.vercel.app";
 
 export const CONSTANT = {
   url,
@@ -328,13 +338,13 @@ export const copyText = (content: string, forceDowngrade: boolean = false) => {
   const isDowngrade = forceDowngrade || !navigator.clipboard;
   if (isDowngrade) {
     // 降级
-    let textarea = document.createElement('textarea');
+    let textarea = document.createElement("textarea");
     // 隐藏此输入框
     textarea.style.width = 0;
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-1035px';
-    textarea.style.top = '1035px';
-    textarea.setAttribute('readonly', 'readonly');
+    textarea.style.position = "fixed";
+    textarea.style.left = "-1035px";
+    textarea.style.top = "1035px";
+    textarea.setAttribute("readonly", "readonly");
     // 插入元素
     document.body.appendChild(textarea);
     // 赋值
@@ -342,7 +352,7 @@ export const copyText = (content: string, forceDowngrade: boolean = false) => {
     // 选中
     textarea.select();
     // 复制
-    document.execCommand('copy', true);
+    document.execCommand("copy", true);
     // 移除输入框
     document.body.removeChild(textarea);
   } else {
@@ -356,7 +366,10 @@ export const copyText = (content: string, forceDowngrade: boolean = false) => {
   }
 };
 
-export const preLoadImg = (imgArr: string[], loadState = (progress: number) => {}) => {
+export const preLoadImg = (
+  imgArr: string[],
+  loadState = (progress: number) => {}
+) => {
   let num = imgArr.length;
   let loading = 0;
   let start = +new Date();
@@ -365,7 +378,7 @@ export const preLoadImg = (imgArr: string[], loadState = (progress: number) => {
     if (loading == num - 1) {
       loading = num;
       loadState(1);
-      console.log('加载图片耗时', +new Date() - start);
+      console.log("加载图片耗时", +new Date() - start);
     }
     loading++;
   }
